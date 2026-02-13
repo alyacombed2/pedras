@@ -1,21 +1,22 @@
 const btn = document.getElementById("curtirBtn");
 const display = document.getElementById("curtidas");
 
-const namespace = "alyaPedrasTeste123";
+// MUDE isso pra um nome único do seu site
+const namespace = "alyasite";
 const key = "likes";
 
-// carregar likes
-async function load() {
-  const res = await fetch(`https://api.countapi.xyz/get/${namespace}/${key}`);
-  const data = await res.json();
-  display.innerText = (data.value || 0) + " curtidas";
-}
+// Pega likes ao abrir
+fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
+  .then(res => res.json())
+  .then(data => {
+    display.textContent = `${data.value} curtidas`;
+  });
 
-load();
-
-// clicar
-btn.addEventListener("click", async () => {
-  const res = await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
-  const data = await res.json();
-  display.innerText = data.value + " curtidas";
+// Quando clicar
+btn.addEventListener("click", () => {
+  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
+    .then(res => res.json())
+    .then(data => {
+      display.textContent = `${data.value} curtidas`;
+    });
 });
