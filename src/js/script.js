@@ -1,28 +1,21 @@
 const btn = document.getElementById("curtirBtn");
 const display = document.getElementById("curtidas");
 
-const namespace = "pedras-alya-2026"; // nome único
+const namespace = "alyaPedrasTeste123";
 const key = "likes";
 
-// cria contador (se não existir)
-fetch(`https://api.countapi.xyz/create?namespace=${namespace}&key=${key}&value=0`);
-
-// função pra atualizar tela
-function carregarLikes() {
-  fetch(`https://api.countapi.xyz/get/${namespace}/${key}`)
-    .then(r => r.json())
-    .then(d => {
-      display.textContent = `${d.value} curtida${d.value > 1 ? "s" : ""}`;
-    });
+// carregar likes
+async function load() {
+  const res = await fetch(`https://api.countapi.xyz/get/${namespace}/${key}`);
+  const data = await res.json();
+  display.innerText = (data.value || 0) + " curtidas";
 }
 
-carregarLikes();
+load();
 
-// clique = soma 1
-btn.onclick = () => {
-  fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`)
-    .then(r => r.json())
-    .then(d => {
-      display.textContent = `${d.value} curtida${d.value > 1 ? "s" : ""}`;
-    });
-};
+// clicar
+btn.addEventListener("click", async () => {
+  const res = await fetch(`https://api.countapi.xyz/hit/${namespace}/${key}`);
+  const data = await res.json();
+  display.innerText = data.value + " curtidas";
+});
