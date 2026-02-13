@@ -5,6 +5,7 @@
     <title>Notícias Online</title>
     <link rel="stylesheet" href="src/css/style.css">
 </head>
+
 <body>
 
     <!-- Cabeçalho -->
@@ -24,15 +25,15 @@
             <h2>Homem é encontrado depois de 4 meses em situação precária</h2>
             
             <div class="imagem">
-                <img src="https://media.discordapp.net/attachments/705954734279753902/1471552512527171584/Imagem.jpg?ex=698f5993&is=698e0813&hm=b6565657c68fcf3fea4588d8581026a1f1bd27ca468ef1d2e2b08849fbc55c2e&=&format=webp&width=901&height=676" alt="Imagem da notícia">
+                <img src="https://media.discordapp.net/attachments/705954734279753902/1471552512527171584/Imagem.jpg" alt="Imagem da notícia">
             </div>
             
             <p>
                 Pedro Henrique Do Pinho Guilherme é encontrado depois de 4 meses dentro do rio do Bicão, 20 quilos mais magro e comendo apenas miojo achado dentro do esgoto.
             </p>
 
-            <button id="curtirBtn">Curtir 👍</button> 
-            <span id="curtidas">0 curtidas</span>
+            <button id="likeBtn">Curtir 👍</button> 
+            <span id="likes">0 curtidas</span>
         </article>
     </main>
 
@@ -41,6 +42,38 @@
         <p>© 2026 Notícias Online - Todos os direitos reservados</p>
     </footer>
 
-    <script src="src/js/script.js"></script>
+    <!-- Firebase Script -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, doc, getDoc, updateDoc, increment } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyA1f0gUxxIUCAVsirkQeluTPIvX2HVX7a0",
+            authDomain: "pedra-533d4.firebaseapp.com",
+            projectId: "pedra-533d4",
+            storageBucket: "pedra-533d4.firebasestorage.app",
+            messagingSenderId: "395241620914",
+            appId: "1:395241620914:web:400c78f9a77db4903490ab"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        const ref = doc(db, "likes", "contador");
+
+        async function loadLikes(){
+            const snap = await getDoc(ref);
+            const valor = snap.data().valor;
+            document.getElementById("likes").innerText = valor + " curtidas";
+        }
+
+        loadLikes();
+
+        document.getElementById("likeBtn").onclick = async () => {
+            await updateDoc(ref, { valor: increment(1) });
+            loadLikes();
+        };
+    </script>
+
 </body>
 </html>
